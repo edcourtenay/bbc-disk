@@ -7,6 +7,7 @@ public class CatCommands
     [Command("cat")]
     public void Cat([Argument] string filename)
     {
-        Console.WriteLine($"Cat {filename}");
+        var fullPath = Path.GetFullPath(Path.Join(Directory.GetCurrentDirectory(), filename));
+        Console.WriteLine($"Cat {fullPath} {File.Exists(fullPath)}");
     }
 }
