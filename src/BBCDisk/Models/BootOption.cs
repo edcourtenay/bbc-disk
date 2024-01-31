@@ -1,4 +1,4 @@
-﻿namespace BBCDisk;
+﻿namespace BBCDisk.Models;
 
 public enum BootOption
 {
