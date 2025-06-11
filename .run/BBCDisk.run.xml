@@ -1,7 +1,7 @@
 ﻿<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="BBCDisk" type="DotNetProject" factoryName=".NET Project">
     <option name="EXE_PATH" value="$PROJECT_DIR$/src/BBCDisk/bin/Debug/net8.0/BBCDisk.exe" />
-    <option name="PROGRAM_PARAMETERS" value="cat ../../../../../disks/elite.ssd " />
+    <option name="PROGRAM_PARAMETERS" value="dump --disk ../../../../../disks/elite.ssd --file !BOOT" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/BBCDisk/bin/Debug/net8.0" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />

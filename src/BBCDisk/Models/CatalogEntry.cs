@@ -23,8 +23,10 @@ public record CatalogEntry
     public required int Length { get; init; }
     public required int StartSector { get; init; }
 
+    public string DirectoryFilename => $"{Directory}.{Filename}";
+
     private int Address(int value) => (value & 0x030000) == 0x030000 ? value | 0xFF0000 : value;
 
     public override string ToString() =>
-        $"{Directory}.{Filename,-7} {(Locked ? 'L' : ' ')} {LoadAddress:X6} {ExecAddress:X6} {Length:X6} {StartSector:X3}";
+        $"{DirectoryFilename,-9} {(Locked ? 'L' : ' ')} {LoadAddress:X6} {ExecAddress:X6} {Length:X6} {StartSector:X3}";
 }
