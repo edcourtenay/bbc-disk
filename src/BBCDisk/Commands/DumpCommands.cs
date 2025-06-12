@@ -69,7 +69,8 @@ public class DumpCommands
                 col1.Append($"{b:X2} ");
                 col2.Append(char.IsControl(c) ? '.' : c);
             }
-            Console.WriteLine($"{offset:X4}: {col1} {col2}");
+            
+            Console.WriteLine($"{offset:X4}: {col1, -chunkSize * 3} {col2, -chunkSize}");
         }
     }
 }
