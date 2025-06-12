@@ -18,28 +18,20 @@ public class DumpCommands
     {
         var disk = _diskHandler.Read(diskFilename);
 
-        if (file is not [_, '.', ..])
+        if (!disk.TryReadFile(file, out var data))
         {
-            file = $"$.{file}";
+            Console.Error.WriteLine("Cannot locate file ${file} on disk image");
+            return;
         }
 
-        var catalogEntry = disk.CatalogEntries.FirstOrDefault(x => x.DirectoryFilename == file);
-
-        if (catalogEntry is not null)
+        switch (text)
         {
-            Console.WriteLine(catalogEntry);
-
-            var memory = disk.ReadSector(catalogEntry.StartSector, (catalogEntry.Length / 256) + 1)[..catalogEntry.Length];
-
-            switch (text)
-            {
-                case true:
-                    DumpText(memory);
-                    break;
-                default:
-                    DumpHex(memory);
-                    break;
-            }
+            case true:
+                DumpText(data);
+                break;
+            default:
+                DumpHex(data);
+                break;
         }
     }
 

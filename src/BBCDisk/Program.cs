@@ -11,5 +11,6 @@ var app = builder.Build();
 
 app.AddCommands<CatCommands>();
 app.AddCommands<DumpCommands>();
+app.AddCommands<ExtractCommands>();
 
 app.Run();

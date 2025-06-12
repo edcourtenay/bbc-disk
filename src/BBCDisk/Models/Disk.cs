@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace BBCDisk.Models;
 
@@ -62,7 +63,7 @@ public record Disk
         {
             for (int i = 0; i < FileCount; i++)
             {
-                yield return ReadCatalogEntry(i);
+                yield return ParseCatalogEntry(i);
             }
         }
     }
@@ -74,11 +75,38 @@ public record Disk
 
     public Memory<byte> ReadSector(int track, int sector, int length) =>
         Data.Slice((track * 10 + sector) * 256, 256 * length);
+  
+    public Memory<byte>? ReadFile(string filename)
+    {
+        return TryReadFile(filename, out var file) ? file : null;
+    }
+    
+    public bool TryReadFile(string filename, [NotNullWhen(true)] out Memory<byte> file)
+    {
+        if (filename is not [_, '.', ..])
+        {
+            filename = $"$.{filename}";
+        }
+
+        var catalogEntry = CatalogEntries.FirstOrDefault(x => x.DirectoryFilename == filename);
+
+        if (catalogEntry is not null)
+        {
+            file = ReadCatalogEntry(catalogEntry);
+            return true;
+        }
+
+        file = null;
+        return false;
+    }
+
+    public Memory<byte> ReadCatalogEntry(CatalogEntry catalogEntry) => 
+        ReadSector(catalogEntry.StartSector, (catalogEntry.Length / 256) + 1)[..catalogEntry.Length];
 
     private Memory<byte> CatalogData() =>
         ReadSector(0, 0, 2);
 
-    private CatalogEntry ReadCatalogEntry(int i)
+    private CatalogEntry ParseCatalogEntry(int i)
     {
         var offset = i * 8 + 8;
         var catalogData = CatalogData();
