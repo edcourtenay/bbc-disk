@@ -16,33 +16,30 @@ public class DumpCommands
     [Command("dumpfile")]
     public void DumpText([Option("disk", ['d'], Description = "Disk image to load")] string diskFilename, string file, bool text = false)
     {
-        var disk = _diskHandler.Read(diskFilename);
-
-        if (!disk.TryReadFile(file, out var data))
+        _diskHandler.Read(diskFilename, disk =>
         {
-            Console.Error.WriteLine("Cannot locate file ${file} on disk image");
-            return;
-        }
-
-        switch (text)
-        {
-            case true:
-                DumpText(data);
-                break;
-            default:
-                DumpHex(data);
-                break;
-        }
+            disk.ReadFile(file, data =>
+            {
+                switch (text)
+                {
+                    case true:
+                        DumpText(data);
+                        break;
+                    default:
+                        DumpHex(data);
+                        break;
+                }
+            });
+        });
     }
 
     [Command("dumpsector")]
     public void DumpSector([Option("disk", ['d'], Description = "Disk image to load")] string diskFilename, int sector, int count = 1)
     {
-        var disk = _diskHandler.Read(diskFilename);
-
-        var memory = disk.ReadSector(sector, count);
-
-        DumpHex(memory);
+        _diskHandler.Read(diskFilename, disk =>
+        {
+            DumpHex(disk.ReadSector(sector, count));
+        });
     }
 
     private static void DumpText(Memory<byte> memory)

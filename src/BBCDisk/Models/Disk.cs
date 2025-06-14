@@ -75,12 +75,15 @@ public record Disk
 
     public Memory<byte> ReadSector(int track, int sector, int length) =>
         Data.Slice((track * 10 + sector) * 256, 256 * length);
-  
-    public Memory<byte>? ReadFile(string filename)
+
+    public void ReadFile(string filename, Action<Memory<byte>> action)
     {
-        return TryReadFile(filename, out var file) ? file : null;
+        if (TryReadFile(filename, out var file))
+        {
+            action(file);
+        }
     }
-    
+
     public bool TryReadFile(string filename, [NotNullWhen(true)] out Memory<byte> file)
     {
         if (filename is not [_, '.', ..])
@@ -96,6 +99,7 @@ public record Disk
             return true;
         }
 
+        Console.Error.WriteLine($"Cannot locate file {filename} on disk image");
         file = null;
         return false;
     }

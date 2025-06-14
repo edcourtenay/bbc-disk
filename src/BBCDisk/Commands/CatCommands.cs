@@ -18,18 +18,19 @@ public class CatCommands
         var fullPath = Path.GetFullPath(Path.Join(Directory.GetCurrentDirectory(), filename));
         Console.WriteLine($"Cat {fullPath} {File.Exists(fullPath)}");
 
-        var disk = _diskHandler.Read(filename);
-
-        Console.WriteLine($"Title: {disk.Title}");
-        Console.WriteLine($"Cycle: {disk.Cycle:x2}");
-        //Console.WriteLine($"File Offset: {fileOffset}");
-
-        Console.WriteLine($"Boot Option: {disk.BootOption}");
-        Console.WriteLine($"Disk Size: {disk.DiskSize}");
-
-        foreach (var catalogEntry in disk.CatalogEntries)
+        _diskHandler.Read(filename, disk =>
         {
-            Console.WriteLine($"{catalogEntry}");
-        }
+            Console.WriteLine($"Title: {disk.Title}");
+            Console.WriteLine($"Cycle: {disk.Cycle:x2}");
+            //Console.WriteLine($"File Offset: {fileOffset}");
+
+            Console.WriteLine($"Boot Option: {disk.BootOption}");
+            Console.WriteLine($"Disk Size: {disk.DiskSize}");
+
+            foreach (var catalogEntry in disk.CatalogEntries)
+            {
+                Console.WriteLine($"{catalogEntry}");
+            }
+        });
     }
 }

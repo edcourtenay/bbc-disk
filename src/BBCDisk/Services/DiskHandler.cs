@@ -5,16 +5,17 @@ namespace BBCDisk.Services
 {
     public class DiskHandler
     {
-        public Disk Read(string filename)
+        public Disk Read(string filename, Action<Disk>? action = null)
         {
             var fullPath = Path.GetFullPath(Path.Join(Directory.GetCurrentDirectory(), filename));
 
-            Memory<byte> diskImage = File.ReadAllBytes(fullPath);
-
-            return new Disk
+            var disk = new Disk
             {
-                Data = diskImage
+                Data = (Memory<byte>)File.ReadAllBytes(fullPath)
             };
+            action?.Invoke(disk);
+
+            return disk;
         }
     }
 }
