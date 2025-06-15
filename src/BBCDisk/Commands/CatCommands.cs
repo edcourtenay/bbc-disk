@@ -15,9 +15,6 @@ public class CatCommands
     [Command("cat")]
     public void Cat([Option("disk", ['d'])] string filename)
     {
-        var fullPath = Path.GetFullPath(Path.Join(Directory.GetCurrentDirectory(), filename));
-        Console.WriteLine($"Cat {fullPath} {File.Exists(fullPath)}");
-
         _diskHandler.Read(filename, disk =>
         {
             Console.WriteLine($"Title: {disk.Title}");
