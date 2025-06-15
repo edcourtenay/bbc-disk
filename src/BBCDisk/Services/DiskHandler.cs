@@ -1,21 +1,19 @@
 ﻿using BBCDisk.Models;
 
 
-namespace BBCDisk.Services
+namespace BBCDisk.Services;
+
+public class DiskHandler
 {
-    public class DiskHandler
+    public void Read(string filename, Action<Disk> action)
     {
-        public Disk Read(string filename, Action<Disk>? action = null)
+        var path = Path.GetRelativePath(Directory.GetCurrentDirectory(), filename);
+
+        var disk = new Disk
         {
-            var fullPath = Path.GetFullPath(Path.Join(Directory.GetCurrentDirectory(), filename));
+            Data = (Memory<byte>)File.ReadAllBytes(path)
+        };
 
-            var disk = new Disk
-            {
-                Data = (Memory<byte>)File.ReadAllBytes(fullPath)
-            };
-            action?.Invoke(disk);
-
-            return disk;
-        }
+        action.Invoke(disk);
     }
 }
