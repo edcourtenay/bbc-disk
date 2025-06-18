@@ -7,6 +7,13 @@
         <Nullable>enable</Nullable>
         <AssemblyName>bbc-disk</AssemblyName>
     </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+    </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Cocona" Version="2.2.0" />

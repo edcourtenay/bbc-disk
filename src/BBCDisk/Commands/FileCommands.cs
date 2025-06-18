@@ -1,4 +1,5 @@
-﻿using BBCDisk.Services;
+﻿using BBCDisk.Arguments;
+using BBCDisk.Services;
 using Cocona;
 
 namespace BBCDisk.Commands;
@@ -13,9 +14,9 @@ public class FileCommands
     }
     
     [Command("extractfile")]
-    public void ExtractFile([Option(['d'], Description = "Disk image to load")] string disk, string file, string? destination)
+    public void ExtractFile(DiskArguments diskArgs, string file, string? destination)
     {
-        _diskHandler.Read(disk, diskImage =>
+        _diskHandler.Read(diskArgs.Disk, diskImage =>
         {
             diskImage.ReadFile(file, data =>
             {

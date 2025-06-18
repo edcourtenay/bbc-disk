@@ -21,7 +21,7 @@ public record Disk
         {
             var catalogData = CatalogData();
 
-            return 10 * (catalogData.Span[260] & 0xF0 >> 4) + (catalogData.Span[260] & 0x0F);
+            return ((catalogData.Span[260] >> 4) & 0x0F) * 10 + (catalogData.Span[260] & 0x0F); // Combine as decimal
         }
     }
 
